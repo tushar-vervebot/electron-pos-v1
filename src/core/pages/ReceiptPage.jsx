@@ -1,6 +1,8 @@
 import React from 'react'
 import usePOSStore from '../stores/posStore'
 import localDB from '../services/localDB'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
 
 const STORE_NAME = 'My POS Store'
 const STORE_ADDRESS = '123 Main Street, City, State 00000'
@@ -35,6 +37,8 @@ export default function ReceiptScreen() {
       <div id="receipt" className="w-full max-w-sm bg-white text-gray-900 rounded-2xl shadow-2xl overflow-hidden print-receipt">
         {/* Store header */}
         <div className="bg-gray-900 text-white px-6 py-5 text-center">
+          {/* Slot: plugins can replace or extend the receipt header */}
+          <Slot name={SLOT_NAMES.RECEIPT_HEADER} props={{ order, payment }} />
           <h1 className="text-xl font-bold tracking-wide">{STORE_NAME}</h1>
           <p className="text-xs text-gray-400 mt-1">{STORE_ADDRESS}</p>
           <p className="text-xs text-gray-400">{STORE_PHONE}</p>
@@ -104,6 +108,9 @@ export default function ReceiptScreen() {
             <p className="font-semibold text-gray-800 mb-1">Thank you for your purchase! 🎉</p>
             <p>Please come again</p>
           </div>
+
+          {/* Slot: plugins inject content at the bottom of the receipt (loyalty points earned, QR codes…) */}
+          <Slot name={SLOT_NAMES.RECEIPT_FOOTER} props={{ order, payment }} />
         </div>
       </div>
 

@@ -1,0 +1,43 @@
+/**
+ * themes.css — Runtime theme overrides via data-theme attribute.
+ *
+ * Usage (React):
+ *   document.documentElement.setAttribute('data-theme', 'dark')
+ *   document.documentElement.setAttribute('data-theme', 'kiosk')
+ *
+ * Plugins register themes through:
+ *   pluginAPI.registerTheme('my-theme', { '--color-primary': '#ff6600' })
+ * Then activate via themeRegistry.applyTheme('my-theme').
+ */
+
+/* ── Dark theme (default for POS) ─────────────────────────── */
+[data-theme='dark'] {
+  --color-primary:    #3b82f6;
+  --color-bg:         #0f172a;
+  --color-surface:    #1e293b;
+  --color-card:       #334155;
+  --color-border:     #475569;
+  --color-text:       #f8fafc;
+  --color-muted:      #94a3b8;
+}
+
+/* ── Light theme ───────────────────────────────────────────── */
+[data-theme='light'] {
+  --color-primary:    #2563eb;
+  --color-bg:         #f8fafc;
+  --color-surface:    #ffffff;
+  --color-card:       #f1f5f9;
+  --color-border:     #e2e8f0;
+  --color-text:       #0f172a;
+  --color-muted:      #64748b;
+}
+
+/* ── Kiosk theme (larger touch targets) ───────────────────── */
+[data-theme='kiosk'] {
+  --space-md:         16px;
+  --space-lg:         24px;
+  --font-size-md:     16px;
+  --font-size-lg:     20px;
+  --radius-md:        12px;
+  --radius-lg:        16px;
+}

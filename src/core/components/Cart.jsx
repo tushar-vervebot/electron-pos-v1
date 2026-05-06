@@ -1,5 +1,7 @@
 import React from 'react'
 import usePOSStore from '../stores/posStore'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
 
 export default function Cart({ onCheckout }) {
   const {
@@ -27,6 +29,8 @@ export default function Cart({ onCheckout }) {
           </button>
         )}
       </div>
+      {/* Slot: plugins can inject content after cart header */}
+      <Slot name={SLOT_NAMES.POS_CART_HEADER} />
 
       {/* Customer name input */}
       <div className="px-4 pt-3 pb-2 flex-shrink-0">
@@ -107,6 +111,9 @@ export default function Cart({ onCheckout }) {
             className="w-full bg-pos-surface border border-pos-border rounded-lg px-3 py-1.5 text-xs text-pos-text placeholder-pos-muted resize-none focus:outline-none focus:border-pos-blue"
           />
 
+          {/* Slot: plugins inject content above the checkout button (loyalty points, gift cards…) */}
+          <Slot name={SLOT_NAMES.POS_CART_FOOTER} props={{ cartItems, subTotal, tax, total, discount }} />
+
           {/* Checkout button */}
           <button
             onClick={onCheckout}
@@ -114,6 +121,9 @@ export default function Cart({ onCheckout }) {
           >
             Proceed to Payment → ${total.toFixed(2)}
           </button>
+
+          {/* Slot: plugins can add extra action buttons below checkout */}
+          <Slot name={SLOT_NAMES.POS_CART_ACTIONS} props={{ cartItems, total }} />
         </div>
       )}
     </div>
@@ -127,6 +137,8 @@ function CartItem({ item, onRemove, onQtyChange }) {
       <div className="flex-1 min-w-0">
         <p className="text-xs font-medium text-pos-text truncate">{item.product.name}</p>
         <p className="text-xs text-pos-muted">${item.unitPrice.toFixed(2)} each</p>
+        {/* Slot: plugins can inject info after the item name (loyalty points, tags…) */}
+        <Slot name={SLOT_NAMES.POS_CART_ITEM_AFTER_NAME} props={{ item }} />
       </div>
 
       {/* Quantity controls */}

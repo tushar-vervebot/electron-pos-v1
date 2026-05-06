@@ -1,0 +1,13 @@
+{
+  "id": "loyalty",
+  "name": "Loyalty Points",
+  "version": "1.0.0",
+  "description": "Awards loyalty points on every order. Shows earned points in the cart footer and on the receipt. Demonstrates slots, hooks, events, and services.",
+  "entry": "index.js",
+  "enabled": true,
+  "permissions": [
+    "orders:read",
+    "customers:read",
+    "customers:update"
+  ]
+}

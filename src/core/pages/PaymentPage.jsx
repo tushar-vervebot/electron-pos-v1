@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import usePOSStore from '../stores/posStore'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
+import { getAllPaymentMethods } from '../registries/paymentRegistry'
 
-const PAYMENT_METHODS = [
+// Built-in payment methods (always available)
+const BUILTIN_PAYMENT_METHODS = [
   { id: 'cash',   label: 'Cash',        icon: '💵' },
   { id: 'card',   label: 'Credit/Debit', icon: '💳' },
-  { id: 'online', label: 'Online / QR',  icon: '📱' }
+  { id: 'online', label: 'Online / QR',  icon: '📱' },
 ]
 
 // Quick cash presets (multiples of 10/20/50)
@@ -23,6 +27,13 @@ export default function PaymentScreen() {
   const change    = method === 'cash' ? Math.max(0, cashVal - total) : 0
   const canPay    = method !== 'cash' || cashVal >= total
   const presets   = buildCashPresets(total)
+
+  // Merge built-in + plugin-registered payment methods
+  const pluginMethods = getAllPaymentMethods()
+  const allMethods = [
+    ...BUILTIN_PAYMENT_METHODS,
+    ...pluginMethods.filter(m => !BUILTIN_PAYMENT_METHODS.find(b => b.id === m.id)),
+  ]
 
   const handlePay = async () => {
     setProcessing(true)
@@ -84,9 +95,9 @@ export default function PaymentScreen() {
         <div className="p-5 flex flex-col gap-5 h-full">
           <h2 className="text-base font-bold text-pos-text">Select Payment Method</h2>
 
-          {/* Method picker */}
+          {/* Method picker — built-in + plugin-registered methods */}
           <div className="grid grid-cols-3 gap-2">
-            {PAYMENT_METHODS.map(m => (
+            {allMethods.map(m => (
               <button
                 key={m.id}
                 onClick={() => setMethod(m.id)}
@@ -102,6 +113,9 @@ export default function PaymentScreen() {
               </button>
             ))}
           </div>
+
+          {/* Slot: plugin payment methods (e.g. gift-card, split-payment UI) */}
+          <Slot name={SLOT_NAMES.PAYMENT_METHODS} props={{ method, setMethod, total }} />
 
           {/* Cash input */}
           {method === 'cash' && (
@@ -169,6 +183,9 @@ export default function PaymentScreen() {
           )}
 
           <div className="mt-auto space-y-2">
+            {/* Slot: plugins inject content just above the pay button (loyalty summary, split total…) */}
+            <Slot name={SLOT_NAMES.PAYMENT_SUMMARY_AFTER_TOTAL} props={{ total, method }} />
+
             <button
               onClick={handlePay}
               disabled={!canPay || processing}

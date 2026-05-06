@@ -4,6 +4,10 @@ import { productAPI, orderAPI, paymentAPI, healthAPI } from '../services/api/api
 import localDB from '../services/storage/indexedDbService'
 import { syncService } from '../services/sync/syncService'
 import { wsService } from '../services/websocket/socketService'
+import { runHooks } from '../registries/hookRegistry'
+import { eventBus } from '../events/eventBus'
+import { HOOK_NAMES } from '../hooks/hookNames'
+import { EVENT_NAMES } from '../events/eventNames'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 // Debounce timer for remote_update → fetchProducts.
@@ -259,33 +263,61 @@ const usePOSStore = create((set, get) => ({
   // ═══════════════════════════════════════════════════════════════
   // CART
   // ═══════════════════════════════════════════════════════════════
-  addToCart: (product) => {
+  addToCart: async (product) => {
     const items = get().cartItems
     const existing = items.find(i => i.product.id === product.id)
-    let updated
 
+    // Run before-add hook — plugins can block or modify the product
+    let hookProduct = product
+    try {
+      hookProduct = await runHooks(HOOK_NAMES.CART_BEFORE_ADD_ITEM, product)
+    } catch (err) {
+      console.warn('[posStore] cart.beforeAddItem hook error', err)
+    }
+    if (!hookProduct) return // hook cancelled the add
+
+    let updated
     if (existing) {
       updated = items.map(i =>
-        i.product.id === product.id
+        i.product.id === hookProduct.id
           ? { ...i, quantity: i.quantity + 1, total: (i.quantity + 1) * i.unitPrice }
           : i
       )
     } else {
       updated = [...items, {
-        product,
+        product:   hookProduct,
         quantity:  1,
-        unitPrice: product.price,
-        total:     product.price
+        unitPrice: hookProduct.price,
+        total:     hookProduct.price,
       }]
     }
 
-    const totals = calcTotals(updated)
+    // Run after-total-calculate hook — plugins can modify totals (discounts, loyalty)
+    let totals = calcTotals(updated)
+    try {
+      const hookResult = await runHooks(HOOK_NAMES.CART_AFTER_TOTAL_CALCULATE, { items: updated, ...totals })
+      if (hookResult) totals = { subTotal: hookResult.subTotal, tax: hookResult.tax, total: hookResult.total }
+    } catch (err) {
+      console.warn('[posStore] cart.afterTotalCalculate hook error', err)
+    }
+
     set({ cartItems: updated, ...totals })
+    eventBus.emit(EVENT_NAMES.CART_ITEM_ADDED, { product: hookProduct, cartItems: updated })
+
+    // Run after-add hook
+    try { await runHooks(HOOK_NAMES.CART_AFTER_ADD_ITEM, hookProduct) } catch (_) {}
   },
 
-  removeFromCart: (productId) => {
+  removeFromCart: async (productId) => {
+    const product = get().cartItems.find(i => i.product.id === productId)?.product
+
+    try { await runHooks(HOOK_NAMES.CART_BEFORE_REMOVE_ITEM, product) } catch (_) {}
+
     const updated = get().cartItems.filter(i => i.product.id !== productId)
     set({ cartItems: updated, ...calcTotals(updated) })
+    eventBus.emit(EVENT_NAMES.CART_ITEM_REMOVED, { productId, cartItems: updated })
+
+    try { await runHooks(HOOK_NAMES.CART_AFTER_REMOVE_ITEM, product) } catch (_) {}
   },
 
   updateQuantity: (productId, qty) => {
@@ -426,6 +458,9 @@ const usePOSStore = create((set, get) => ({
         completedPayment: payRes.data,
         currentScreen:    'receipt'
       })
+
+      // Emit order.paid event so plugins (loyalty, analytics, CCTV…) can react
+      eventBus.emit(EVENT_NAMES.ORDER_PAID, { order: payRes.data.order, payment: payRes.data })
 
       // Remove from open orders list
       set(s => ({ openOrders: s.openOrders.filter(o => o.id !== orderId) }))

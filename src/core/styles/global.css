@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Design tokens must be loaded first so all components can reference them */
+@import './variables.css';
+@import './themes.css';
+
 /* ── Global Reset ──────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;

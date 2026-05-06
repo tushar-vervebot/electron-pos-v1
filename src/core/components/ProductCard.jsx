@@ -1,4 +1,6 @@
 import React from 'react'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
 
 // React.memo: skips re-rendering this card if the product reference and onAdd
 // are the same as the previous render. With surgical updates in posStore, only
@@ -63,6 +65,9 @@ const ProductCard = React.memo(function ProductCard({ product, onAdd }) {
           + Add
         </span>
       </div>
+
+      {/* Slot: plugins can inject badges on top of the product card (loyalty points, promo tags…) */}
+      <Slot name={SLOT_NAMES.POS_PRODUCT_CARD_BADGE} props={{ product }} />
     </button>
   )
 })
