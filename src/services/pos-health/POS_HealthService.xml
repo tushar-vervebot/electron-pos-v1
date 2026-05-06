@@ -1,0 +1,15 @@
+<service>
+  <id>POS_HealthService</id>
+  <name>POS Health Service</name>
+  <description>POS System health check HTTP endpoint on localhost:5001</description>
+  <!-- %BASE% resolves to the directory containing POS_HealthService.exe -->
+  <executable>%BASE%\pos-health-service.exe</executable>
+  <logpath>C:\ProgramData\POS System\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>5</keepFiles>
+  </log>
+  <onfailure action="restart" delay="10 sec"/>
+  <onfailure action="restart" delay="30 sec"/>
+  <onfailure action="none"/>
+</service>

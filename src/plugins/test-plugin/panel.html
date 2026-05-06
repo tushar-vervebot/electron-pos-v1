@@ -1,0 +1,46 @@
+<!-- test-plugin/panel.html
+     Pure HTML panel injected into #plugin-panels in the main renderer.
+     No <script> tags — all interactivity is wired by the renderer's
+     plugin loader using data-plugin-id + data-plugin-action attributes.
+-->
+<div class="plugin-panel" id="panel-test-plugin">
+  <div class="plugin-panel-header">
+    <span class="plugin-panel-icon">🔌</span>
+    <span class="plugin-panel-title">Test Plugin</span>
+    <span class="plugin-panel-badge">v1.0.0</span>
+  </div>
+
+  <div class="plugin-panel-body">
+    <p class="plugin-panel-desc">
+      Developer test plugin — demonstrates hooks, IPC, and the panel slot.
+    </p>
+
+    <div class="plugin-btn-row">
+      <button
+        class="btn-plugin"
+        data-plugin-id="test-plugin"
+        data-plugin-action="ping"
+        title="Invoke plugin:test-plugin:ping">
+        🏓 Ping
+      </button>
+
+      <button
+        class="btn-plugin"
+        data-plugin-id="test-plugin"
+        data-plugin-action="get-info"
+        title="Invoke plugin:test-plugin:get-info">
+        ℹ️ Get Info
+      </button>
+
+      <button
+        class="btn-plugin"
+        data-plugin-id="test-plugin"
+        data-plugin-action="get-cart-total"
+        title="Invoke plugin:test-plugin:get-cart-total">
+        🛒 Cart Total
+      </button>
+    </div>
+
+    <pre class="plugin-output" id="test-plugin-output">Awaiting action…</pre>
+  </div>
+</div>

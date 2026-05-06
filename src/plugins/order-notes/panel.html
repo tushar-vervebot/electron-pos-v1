@@ -1,0 +1,62 @@
+<!-- order-notes/panel.html -->
+<div class="plugin-panel" id="panel-order-notes">
+  <div class="plugin-panel-header" style="background:#065f46;">
+    <span class="plugin-panel-icon">📝</span>
+    <span class="plugin-panel-title">Order Notes</span>
+    <span class="plugin-panel-badge">v1.0.0</span>
+  </div>
+
+  <div class="plugin-panel-body">
+    <p class="plugin-panel-desc">
+      Attach a note to the current order. Saved automatically on checkout.
+    </p>
+
+    <!-- Note input row -->
+    <div class="on-input-row">
+      <input
+        id="order-notes-input"
+        type="text"
+        placeholder="e.g. No onions, table 4, VIP customer…"
+        maxlength="200"
+      />
+    </div>
+
+    <!-- Action buttons -->
+    <div class="plugin-btn-row">
+      <button
+        class="btn-plugin btn-plugin-green"
+        data-plugin-id="order-notes"
+        data-plugin-action="set-note"
+        id="on-save-btn"
+        title="Save note to current order">
+        💾 Save Note
+      </button>
+
+      <button
+        class="btn-plugin"
+        data-plugin-id="order-notes"
+        data-plugin-action="get-note"
+        title="Read back the current note">
+        👁 Get Note
+      </button>
+
+      <button
+        class="btn-plugin"
+        data-plugin-id="order-notes"
+        data-plugin-action="get-history"
+        title="Show last 50 saved notes">
+        🕓 History
+      </button>
+
+      <button
+        class="btn-plugin btn-plugin-red"
+        data-plugin-id="order-notes"
+        data-plugin-action="clear-note"
+        title="Clear the current note">
+        🗑 Clear
+      </button>
+    </div>
+
+    <pre class="plugin-output" id="order-notes-output">No note set.</pre>
+  </div>
+</div>

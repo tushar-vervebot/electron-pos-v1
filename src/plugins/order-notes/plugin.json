@@ -1,0 +1,8 @@
+{
+  "id": "order-notes",
+  "name": "Order Notes",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "enabled": true,
+  "description": "Attach a text note to the current order. Notes are saved to a local log file and cleared when the cart resets."
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self';" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Screen</title>
+  <link rel="stylesheet" href="customer.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Welcome</h1>
+    <div id="clock" class="clock"></div>
+  </header>
+
+  <main class="layout">
+    <section class="items-panel">
+      <h2>Your Items</h2>
+      <ul id="customerCart" class="cart-list">
+        <li class="empty">No items yet</li>
+      </ul>
+    </section>
+
+    <aside class="totals-panel">
+      <h2>Total</h2>
+      <div class="row"><span>Subtotal</span><span id="cSubtotal">$0.00</span></div>
+      <div class="row"><span>Tax</span><span id="cTax">$0.00</span></div>
+      <div class="row grand"><span>Payable</span><span id="cTotal">$0.00</span></div>
+      <div id="updatedAt" class="updated">Waiting for POS...</div>
+    </aside>
+  </main>
+
+  <script src="customer.js"></script>
+</body>
+</html>

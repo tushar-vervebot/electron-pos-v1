@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POS System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>&#128722; Point of Sale <span class="version-badge">v1.0.15</span></h1>
+    <span id="datetime"></span>
+  </header>
+
+  <main class="layout">
+    <!-- Left: Product Grid -->
+    <section class="products-panel">
+      <h2>Products</h2>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <!-- Right: Cart -->
+    <aside class="cart-panel">
+      <h2>Cart</h2>
+      <ul class="cart-list" id="cartList">
+        <li class="empty-msg">No items added yet.</li>
+      </ul>
+
+      <div class="cart-footer">
+        <div class="totals">
+          <div class="total-row">
+            <span>Subtotal</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="total-row">
+            <span>Tax (8%)</span>
+            <span id="tax">$0.00</span>
+          </div>
+          <div class="total-row grand">
+            <span>Total</span>
+            <span id="grandTotal">$0.00</span>
+          </div>
+        </div>
+
+        <div class="cart-actions">
+          <button class="btn-clear" id="clearBtn">Clear Cart</button>
+          <button class="btn-checkout" id="checkoutBtn">Checkout</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="hardware-panel">
+    <h2>Hardware Setup</h2>
+    <div class="hardware-grid">
+      <div class="hardware-card">
+        <h3>USB Printer</h3>
+        <div class="hardware-row">
+          <label for="printerSelect">Printer</label>
+          <select id="printerSelect"></select>
+        </div>
+        <div class="hardware-actions">
+          <button id="refreshPrintersBtn" class="btn-clear">Refresh Printers</button>
+          <button id="printTestBtn" class="btn-checkout">Print Test</button>
+        </div>
+      </div>
+
+      <div class="hardware-card">
+        <h3>Weight Scale</h3>
+        <div class="hardware-row">
+          <label for="scaleServerUrl">Scale Server URL</label>
+          <input id="scaleServerUrl" type="text" value="ws://127.0.0.1:8765" style="flex:1;font-family:monospace;" />
+        </div>
+        <div class="hardware-row">
+          <label for="scaleExePath">Scale EXE Path</label>
+          <input id="scaleExePath" type="text" placeholder="C:\...\scale_latest_w_id.exe" style="flex:1;font-family:monospace;font-size:0.82em;" />
+        </div>
+        <div class="hardware-actions">
+          <button id="startScaleBtn" class="btn-clear">Start Scale</button>
+          <button id="checkScaleBtn" class="btn-clear">Check</button>
+          <button id="readWeightBtn" class="btn-checkout">Read Weight</button>
+        </div>
+      </div>
+      <div class="hardware-card">
+        <h3>Barcode Scanner</h3>
+        <div class="hardware-row">
+          <label for="scannerServerUrl">Scanner Server URL</label>
+          <input id="scannerServerUrl" type="text" value="ws://127.0.0.1:8766" style="flex:1;font-family:monospace;" />
+        </div>
+        <div class="hardware-row">
+          <label for="scannerExePath">Scanner EXE Path</label>
+          <input id="scannerExePath" type="text" style="flex:1;font-family:monospace;font-size:0.82em;" />
+        </div>
+        <div class="hardware-row" id="scannerBarcodeRow" style="display:none;">
+          <label>Last Barcode</label>
+          <span id="lastBarcode" style="font-family:monospace;font-size:1.1em;font-weight:bold;letter-spacing:2px;">—</span>
+        </div>
+        <div class="hardware-actions">
+          <button id="startScannerBtn" class="btn-clear">Start Scanner</button>
+          <button id="listenScannerBtn" class="btn-checkout">Listen for Scan</button>
+        </div>
+      </div>
+    </div>
+    <pre id="hardwareLog" class="hardware-log"></pre>
+  </section>
+
+  <!-- Plugin Panels — injected dynamically by pluginManager on startup -->
+  <section class="plugin-panels-section" id="plugin-panels-section" style="display:none;">
+    <h2>Extensions</h2>
+    <div class="plugin-panels-grid" id="plugin-panels"></div>
+  </section>
+
+  <!-- Receipt Modal -->
+  <div class="modal-overlay" id="receiptModal" hidden>
+    <div class="modal">
+      <h2>&#9989; Order Complete</h2>
+      <p id="receiptText"></p>
+      <button class="btn-checkout" id="closeReceiptBtn">New Sale</button>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

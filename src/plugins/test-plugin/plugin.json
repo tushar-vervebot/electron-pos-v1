@@ -1,0 +1,8 @@
+{
+  "id": "test-plugin",
+  "name": "Test Plugin",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "enabled": true,
+  "description": "Developer test plugin — demonstrates hooks, IPC handlers, and a UI panel."
+}

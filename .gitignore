@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+frontend/frontend/node_modules/
+backend/node_modules/
+
+# Build outputs
+dist/
+out/
+frontend/dist/
+frontend/frontend/dist/
+frontend/frontend/out/
+backend/dist/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Electron packager / builder
+make/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
