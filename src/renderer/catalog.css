@@ -1,0 +1,156 @@
+/* ============================================================
+   catalog.css — Screen-level CSS Variable Overrides
+   ============================================================
+   This file demonstrates CSS MODULARITY:
+   - We do NOT rewrite .product-card, .topbar, .btn-checkout etc.
+   - We ONLY override the design tokens (CSS variables) scoped
+     to the .catalog-screen wrapper.
+   - Every component inside automatically picks up the new look
+     because they all read from variables, not hard-coded values.
+   ============================================================ */
+
+/* ── Catalog-specific token overrides ────────────────────────
+   Scope: anything inside .catalog-screen inherits these values.
+   Outside .catalog-screen (i.e. on the POS screen) → unchanged.
+   ──────────────────────────────────────────────────────────── */
+.catalog-screen {
+  /* Brand: teal instead of orange */
+  --color-primary:          #0d9488;
+  --color-primary-hover:    #0b7b70;
+  --color-primary-active:   #096b61;
+
+  /* Accent: indigo → violet */
+  --color-accent:           #7c3aed;
+  --color-accent-hover:     #6d28d9;
+  --color-accent-active:    #5b21b6;
+  --color-accent-subtle:    #ede9fe;
+
+  /* Background: cool blue-grey gradient instead of warm orange */
+  --color-bg-from:          #eff6ff;
+  --color-bg-mid:           #e0f2fe;
+  --color-bg-to:            #cffafe;
+
+  /* Topbar matches the teal primary */
+  --topbar-bg:              var(--color-primary);
+
+  /* Cards: slightly off-white tinted surface */
+  --color-surface:          #f8fafc;
+  --color-surface-muted:    #f1f5f9;
+
+  /* Product card hover shadow: violet-tinted */
+  --shadow-md:              0 6px 18px rgba(124, 58, 237, 0.20);
+}
+
+/* ── Card size override — larger cards for a catalog view ─── */
+.catalog-screen .product-grid {
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 20px;
+}
+
+.catalog-screen .product-card {
+  padding: 50px 14px 20px;
+  border-radius: var(--radius-xl);
+}
+
+.catalog-screen .prod-emoji {
+  font-size: 2.8rem;
+}
+
+.catalog-screen .prod-name {
+  font-size: 0.95rem;
+}
+
+.catalog-screen .prod-price {
+  font-size: 1rem;
+}
+
+/* ── Catalog badge on the back-link button ─────────────────── */
+.catalog-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.20);
+  border: 1.5px solid rgba(255, 255, 255, 0.50);
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+  font-size: var(--font-md);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition-base);
+}
+.catalog-back-btn:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* ── "Add to cart" indicator on hover — catalog-only ─────── */
+.catalog-screen .product-card::after {
+  content: '+ Add';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.catalog-screen .product-card {
+  position: relative;
+}
+.catalog-screen .product-card:hover::after {
+  opacity: 1;
+}
+
+/* ── Section heading ─────────────────────────────────────── */
+.catalog-heading {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.5px;
+}
+.catalog-subheading {
+  font-size: var(--font-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ── CSS Modularity info banner ───────────────────────────── */
+.catalog-info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--color-accent-subtle);
+  border: 1.5px solid #ddd6fe;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg) 20px;
+  margin-bottom: var(--spacing-xl);
+}
+.catalog-info-banner-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.catalog-info-banner-body h3 {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 4px;
+}
+.catalog-info-banner-body p {
+  font-size: var(--font-md);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.catalog-info-banner-body code {
+  font-family: 'Consolas', monospace;
+  font-size: 0.8rem;
+  background: #ede9fe;
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  color: var(--color-accent-active);
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Catalog — CSS Modularity Demo</title>
+
+  <!-- 1. Global design tokens (variables.css) -->
+  <link rel="stylesheet" href="variables.css" />
+  <!-- 2. Shared component styles (styles.css) — same file as POS screen -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- 3. Screen-level overrides ONLY — overrides a handful of variables
+          scoped to .catalog-screen. No component CSS is duplicated. -->
+  <link rel="stylesheet" href="catalog.css" />
+</head>
+
+<!-- .catalog-screen wrapper is where CSS variable overrides are scoped -->
+<body class="catalog-screen">
+
+  <!-- ── Topbar: SAME markup as index.html ────────────────────────────
+       The teal colour comes from --topbar-bg: var(--color-primary) in
+       catalog.css overriding --color-primary from #e8590c → #0d9488.
+       Zero HTML changes required to re-colour the topbar. -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html" class="catalog-back-btn">&#8592; Back to POS</a>
+      <h1>&#128230; Product Catalog</h1>
+    </div>
+    <div class="topbar-right">
+      <span id="datetime"></span>
+    </div>
+  </header>
+
+  <!-- ── Main content ───────────────────────────────────────────────── -->
+  <main style="padding: 28px 32px; flex:1; overflow-y:auto;">
+
+    <h2 class="catalog-heading">All Products</h2>
+    <p class="catalog-subheading">Browse the full menu — tap any card to see the CSS modularity demo tooltip.</p>
+
+    <!-- Explainer banner -->
+    <div class="catalog-info-banner">
+      <span class="catalog-info-banner-icon">&#129504;</span>
+      <div class="catalog-info-banner-body">
+        <h3>CSS Modularity in action</h3>
+        <p>
+          This screen reuses the exact same <code>.product-card</code>,
+          <code>.topbar</code> and <code>.product-grid</code> classes from
+          <code>styles.css</code>. The teal colour, violet accent, blue
+          gradient and larger card size all come from a single file —
+          <code>catalog.css</code> — which only overrides a few
+          <code>CSS variables</code> scoped to <code>.catalog-screen</code>.
+          No component code was duplicated.
+        </p>
+      </div>
+    </div>
+
+    <!-- Product grid: SAME class names as POS screen -->
+    <div class="product-grid" id="catalogGrid"></div>
+
+  </main>
+
+  <script src="catalog.js"></script>
+</body>
+</html>
