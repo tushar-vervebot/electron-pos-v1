@@ -1,0 +1,13 @@
+{
+  "id": "gift-card",
+  "name": "Gift Cards",
+  "version": "1.0.0",
+  "description": "Issue and redeem gift cards as a payment method. Registers a custom payment method in the payment registry.",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "orders:write",
+    "payments:write"
+  ]
+}

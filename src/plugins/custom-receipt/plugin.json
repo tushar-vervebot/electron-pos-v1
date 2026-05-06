@@ -1,0 +1,12 @@
+{
+  "id": "custom-receipt",
+  "name": "Custom Receipt",
+  "version": "1.0.0",
+  "description": "Override the default receipt template with a fully customisable layout (logo, custom fields, barcode).",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "receipts:write"
+  ]
+}

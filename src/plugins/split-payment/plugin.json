@@ -1,0 +1,13 @@
+{
+  "id": "split-payment",
+  "name": "Split Payment",
+  "version": "1.0.0",
+  "description": "Split a single order across multiple payment methods (cash + card, etc.).",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "orders:write",
+    "payments:write"
+  ]
+}

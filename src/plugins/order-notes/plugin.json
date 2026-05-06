@@ -2,7 +2,7 @@
   "id": "order-notes",
   "name": "Order Notes",
   "version": "1.1.0",
-  "entry": "frontend.js",
+  "entry": "index.js",
   "enabled": true,
   "description": "Attach a text note to the current order using a dedicated input in the cart."
 }

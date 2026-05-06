@@ -1,0 +1,12 @@
+{
+  "id": "cctv-overlay",
+  "name": "CCTV Overlay",
+  "version": "1.0.0",
+  "description": "Overlay transaction data (items, totals, cashier name) onto a CCTV feed via a secondary window.",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "display:write"
+  ]
+}

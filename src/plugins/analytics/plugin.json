@@ -1,0 +1,13 @@
+{
+  "id": "analytics",
+  "name": "Analytics",
+  "version": "1.0.0",
+  "description": "Track sales events and generate daily/weekly reports. Posts anonymised data to a configurable analytics endpoint.",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "products:read",
+    "network:write"
+  ]
+}

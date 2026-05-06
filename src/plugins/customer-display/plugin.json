@@ -1,0 +1,12 @@
+{
+  "id": "customer-display",
+  "name": "Customer Display",
+  "version": "1.0.0",
+  "description": "Mirror cart totals and a welcome message to a secondary customer-facing screen.",
+  "entry": "main.js",
+  "enabled": false,
+  "permissions": [
+    "orders:read",
+    "display:write"
+  ]
+}
