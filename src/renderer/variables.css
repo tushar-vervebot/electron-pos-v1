@@ -1,0 +1,139 @@
+/* ============================================================
+   variables.css — POS System Design Tokens
+   ============================================================
+   All hard-coded values live here. Styles.css must ONLY use
+   these variables. Plugins can override any token at runtime
+   via themeRegistry.applyTheme().
+   ============================================================ */
+
+:root {
+  /* ── Brand / Primary ──────────────────────────────────── */
+  --color-primary:          #e8590c;
+  --color-primary-hover:    #c94800;
+  --color-primary-active:   #a83b00;
+  --color-primary-text:     #ffffff;
+
+  /* ── Accent (action / interactive) ───────────────────── */
+  --color-accent:           #4f46e5;
+  --color-accent-hover:     #4338ca;
+  --color-accent-active:    #3730a3;
+  --color-accent-subtle:    #e8e6ff;
+
+  /* ── Semantic ─────────────────────────────────────────── */
+  --color-danger:           #ef4444;
+  --color-danger-bg:        #fee2e2;
+  --color-danger-border:    #fca5a5;
+  --color-danger-dark:      #b91c1c;
+  --color-danger-darker:    #7f1d1d;
+
+  --color-success:          #22c55e;
+  --color-success-bg:       #f0fdf4;
+  --color-success-border:   #dcfce7;
+  --color-success-muted:    #bbf7d0;
+  --color-success-text:     #15803d;
+  --color-success-text-alt: #16a34a;
+
+  --color-warning:          #f59e0b;
+
+  /* ── Surfaces ─────────────────────────────────────────── */
+  --color-surface:          #ffffff;
+  --color-surface-muted:    #f9f9f9;
+  --color-surface-subtle:   #fafafa;
+  --color-surface-overlay:  rgba(255, 255, 255, 0.86);
+
+  /* ── Background ───────────────────────────────────────── */
+  --color-bg-from:          #fff4e6;
+  --color-bg-mid:           #ffe8cc;
+  --color-bg-to:            #ffd8a8;
+
+  /* ── Text ─────────────────────────────────────────────── */
+  --color-text:             #1a1a2e;
+  --color-text-muted:       #555555;
+  --color-text-faint:       #888888;
+  --color-text-placeholder: #aaaaaa;
+
+  /* ── Borders ──────────────────────────────────────────── */
+  --color-border:           #e5e7eb;
+  --color-border-muted:     #f0f0f0;
+  --color-border-subtle:    #f5f5f5;
+  --color-border-warm:      #f0c8a8;
+  --color-border-warm-card: #f1d6bf;
+
+  /* ── Topbar ───────────────────────────────────────────── */
+  --topbar-bg:              var(--color-primary);
+  --topbar-height:          56px;
+  --topbar-text:            var(--color-primary-text);
+
+  /* ── Layout ───────────────────────────────────────────── */
+  --cart-width:             360px;
+
+  /* ── Spacing ──────────────────────────────────────────── */
+  --spacing-xs:   4px;
+  --spacing-sm:   8px;
+  --spacing-md:   12px;
+  --spacing-lg:   16px;
+  --spacing-xl:   24px;
+  --spacing-2xl:  32px;
+
+  /* ── Border radius ────────────────────────────────────── */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   10px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-pill: 999px;
+
+  /* ── Font sizes ───────────────────────────────────────── */
+  --font-xs:    0.72rem;
+  --font-sm:    0.78rem;
+  --font-base:  0.82rem;
+  --font-md:    0.88rem;
+  --font-lg:    0.9rem;
+  --font-xl:    1rem;
+  --font-2xl:   1.1rem;
+  --font-3xl:   1.2rem;
+  --font-4xl:   1.4rem;
+
+  /* ── Shadows ──────────────────────────────────────────── */
+  --shadow-xs:   0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md:   0 6px 18px rgba(79, 70, 229, 0.18);
+  --shadow-lg:   0 20px 60px rgba(0, 0, 0, 0.25);
+  --shadow-overlay: 0 2px 10px rgba(0, 0, 0, 0.06);
+
+  /* ── Transitions ──────────────────────────────────────── */
+  --transition-fast:   0.1s;
+  --transition-base:   0.15s;
+  --transition-slow:   0.2s;
+
+  /* ── Hardware panel (warm tones) ──────────────────────── */
+  --hw-bg:            rgba(255, 255, 255, 0.86);
+  --hw-text-heading:  #5f3b18;
+
+  /* ── Scale modal ──────────────────────────────────────── */
+  --scale-value-color: var(--color-success-text);
+  --scale-unit-color:  var(--color-success-text-alt);
+  --scale-bg:          var(--color-success-bg);
+  --scale-border:      var(--color-success-border);
+}
+
+/* ── Dark theme stub ─────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-primary:       #f97316;
+  --color-primary-hover: #ea6c05;
+  --color-accent:        #818cf8;
+  --color-accent-hover:  #6366f1;
+  --color-surface:       #1f2937;
+  --color-surface-muted: #111827;
+  --color-bg-from:       #111827;
+  --color-bg-mid:        #1a2236;
+  --color-bg-to:         #0f172a;
+  --color-text:          #f9fafb;
+  --color-text-muted:    #9ca3af;
+  --color-border:        #374151;
+  --color-border-muted:  #1f2937;
+  --topbar-bg:           #1f2937;
+  --hw-bg:               rgba(31, 41, 55, 0.95);
+  --hw-text-heading:     #d1d5db;
+}
