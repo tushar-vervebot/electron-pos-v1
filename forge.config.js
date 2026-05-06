@@ -33,7 +33,7 @@ module.exports = {
     icon: path.join(__dirname, 'assets', 'icon'),
     asar: true,
     extraResource: [
-      path.join(__dirname, 'src', 'services', 'pos-health'),
+      path.join(__dirname, 'electron', 'services', 'pos-health'),
     ],
     ignore: [
       /^\/tools/,
@@ -52,8 +52,8 @@ module.exports = {
     // @yao-pkg/pkg bundles Node.js + service.js into one self-contained exe
     // that WiX ServiceInstall can register without needing node.exe on PATH.
     prePackage: async () => {
-      const serviceJs  = path.join(__dirname, 'src', 'services', 'pos-health', 'service.js');
-      const serviceExe = path.join(__dirname, 'src', 'services', 'pos-health', 'pos-health-service.exe');
+      const serviceJs  = path.join(__dirname, 'electron', 'services', 'pos-health', 'service.js');
+      const serviceExe = path.join(__dirname, 'electron', 'services', 'pos-health', 'pos-health-service.exe');
 
       if (fs.existsSync(serviceExe)) {
         console.log('\n[Forge] pos-health-service.exe already built – skipping pkg step.\n');
