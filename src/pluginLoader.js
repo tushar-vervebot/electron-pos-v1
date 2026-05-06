@@ -107,7 +107,7 @@ class PluginManager {
    */
   loadAll() {
     const dirs = [
-      __dirname, // bundled plugins live in the same src/plugins/ folder
+      path.join(__dirname, 'plugins'), // bundled plugins live in src/plugins/
     ];
 
     // User-installed plugins directory (outside asar, survives updates)

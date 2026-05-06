@@ -4,8 +4,8 @@ const http = require('http');
 const https = require('https');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
-const hardwareService = require('./services/hardwareService');
-const pluginManager = require('./plugins/pluginManager');
+const hardwareService = require('../services/hardwareService');
+const pluginManager = require('../../src/pluginLoader');
 
 const UPDATE_SERVER_URL = process.env.UPDATE_SERVER_URL || 'http://192.168.68.105:8080';
 
@@ -83,7 +83,7 @@ function createWindow() {
     title: 'POS System',
     webPreferences: {
       // Path updated for new src/ structure
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/preload.js'),
 
       // ── Security flags ───────────────────────────────────────────────────
       contextIsolation: true,        // renderer cannot access Node APIs
@@ -108,7 +108,7 @@ function createWindow() {
   });
 
   // Updated path: renderer lives in src/renderer/
-  mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, '../../src/renderer/index.html'));
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow || mainWindow.isDestroyed()) return;
@@ -141,7 +141,7 @@ function createCustomerWindow(targetDisplay) {
     title: 'POS Customer Screen',
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -151,7 +151,7 @@ function createCustomerWindow(targetDisplay) {
     },
   });
 
-  customerWindow.loadFile(path.join(__dirname, 'renderer', 'customer.html'));
+  customerWindow.loadFile(path.join(__dirname, '../../src/renderer/customer.html'));
   customerWindow.setMenuBarVisibility(false);
   customerWindow.setFullScreen(true);
 
