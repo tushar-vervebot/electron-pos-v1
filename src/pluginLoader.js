@@ -68,6 +68,79 @@ class PluginManager {
         }))
         .filter((p) => p.htmlContent.trim().length > 0);
     });
+
+    // ── List ALL available plugins (active or not) ───────────────────────
+    ipcMain.handle('plugin:list-all', () => {
+      const results = [];
+      const dirs = [path.join(__dirname, 'plugins')];
+      try {
+        const { app } = require('electron');
+        const userDir = path.join(app.getPath('userData'), 'plugins');
+        if (fs.existsSync(userDir)) dirs.push(userDir);
+      } catch (_) {}
+
+      for (const dir of dirs) {
+        try {
+          const entries = fs.readdirSync(dir, { withFileTypes: true });
+          for (const entry of entries) {
+            if (!entry.isDirectory()) continue;
+            const manifestPath = path.join(dir, entry.name, 'plugin.json');
+            if (!fs.existsSync(manifestPath)) continue;
+            try {
+              const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+              results.push({
+                ...manifest,
+                active: this._plugins.has(manifest.id),
+                pluginDir: path.join(dir, entry.name),
+              });
+            } catch (_) {}
+          }
+        } catch (_) {}
+      }
+      return results;
+    });
+
+    // ── Enable / disable a plugin at runtime ────────────────────────────
+    ipcMain.handle('plugin:set-enabled', (_event, { pluginId, enabled }) => {
+      if (enabled) {
+        if (this._plugins.has(pluginId)) return { ok: true };
+        // Find dir by scanning
+        const dirs = [path.join(__dirname, 'plugins')];
+        try {
+          const { app } = require('electron');
+          const userDir = path.join(app.getPath('userData'), 'plugins');
+          if (fs.existsSync(userDir)) dirs.push(userDir);
+        } catch (_) {}
+
+        let found = false;
+        for (const base of dirs) {
+          const dir = path.join(base, pluginId);
+          if (fs.existsSync(path.join(dir, 'plugin.json'))) {
+            this._loadPlugin(dir);
+            found = true;
+            break;
+          }
+        }
+        return { ok: found && this._plugins.has(pluginId) };
+      } else {
+        const entry = this._plugins.get(pluginId);
+        if (!entry) return { ok: true };
+        try {
+          if (typeof entry.instance.deactivate === 'function') entry.instance.deactivate();
+        } catch (_) {}
+        // Remove IPC handlers registered by this plugin
+        for (const ch of this._ipcHandlers) {
+          if (ch.startsWith(`plugin:${pluginId}:`)) {
+            try { ipcMain.removeHandler(ch); } catch (_) {}
+            this._ipcHandlers.delete(ch);
+          }
+        }
+        this._plugins.delete(pluginId);
+        this._panels = this._panels.filter(p => p.pluginId !== pluginId);
+        log.info(`[PluginManager] "${pluginId}" deactivated.`);
+        return { ok: true };
+      }
+    });
   }
 
   // ── Hook system ────────────────────────────────────────────────────────────

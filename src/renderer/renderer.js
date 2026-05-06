@@ -41,12 +41,66 @@ const startScaleBtn = document.getElementById('startScaleBtn');
 const checkScaleBtn = document.getElementById('checkScaleBtn');
 const readWeightBtn = document.getElementById('readWeightBtn');
 const hardwareLog = document.getElementById('hardwareLog');
+
+// --- Scale modal elements ---
+const scaleModalBtn      = document.getElementById('scaleModalBtn');
+const scaleModal         = document.getElementById('scaleModal');
+const scaleModalClose    = document.getElementById('scaleModalClose');
+const scaleDisplayValue  = document.getElementById('scaleDisplayValue');
+const scaleDisplayUnit   = document.getElementById('scaleDisplayUnit');
+const scaleAddToCartRow  = document.getElementById('scaleAddToCartRow');
+const scaleProductName   = document.getElementById('scaleProductName');
+const scaleProductPrice  = document.getElementById('scaleProductPrice');
+const scaleAddCartBtn    = document.getElementById('scaleAddCartBtn');
+
+// --- Scale modal open / close ---
+scaleModalBtn.addEventListener('click', () => { scaleModal.hidden = false; });
+scaleModalClose.addEventListener('click', () => { scaleModal.hidden = true; });
+scaleModal.addEventListener('click', (e) => { if (e.target === scaleModal) scaleModal.hidden = true; });
+
 const SCALE_SERVER_KEY = 'pos.scale.server.url.v1';
 const SCALE_EXE_KEY = 'pos.scale.exe.path.v1';
 const DEFAULT_SCALE_EXE = 'C:\\Users\\kashi\\Downloads\\scale\\scale\\scale_latest_w_id.exe';
 
 let weightReadInProgress = false;
 let lastHardwareLog = { message: '', at: 0 };
+let lastScaleReading = null; // { value, unit }
+
+// Update the big reading display in the scale modal
+function updateScaleDisplay(value, unit) {
+  lastScaleReading = { value, unit };
+  scaleDisplayValue.textContent = value ?? '— —';
+  scaleDisplayUnit.textContent = unit || 'kg';
+  // Show the "Add to Cart" row once we have a reading
+  if (value != null) scaleAddToCartRow.style.display = 'flex';
+}
+
+// Add weighed item to cart
+scaleAddCartBtn.addEventListener('click', () => {
+  const name  = scaleProductName.value.trim() || 'Weighed Item';
+  const pricePerKg = parseFloat(scaleProductPrice.value);
+  const weight = parseFloat(lastScaleReading?.value);
+
+  if (isNaN(weight) || weight <= 0) {
+    logHardware('No valid weight reading. Click "Read Weight" first.');
+    return;
+  }
+
+  const price = isNaN(pricePerKg) || pricePerKg <= 0
+    ? weight  // fall back to weight as price (1:1)
+    : Math.round(weight * pricePerKg * 100) / 100;
+
+  const unit = lastScaleReading?.unit || 'kg';
+  const product = {
+    id: Date.now(),
+    name: `${name} (${weight} ${unit})`,
+    price,
+    emoji: '⚖',
+  };
+  addToCart(product);
+  logHardware(`Added "${product.name}" → $${price.toFixed(2)}`);
+  scaleModal.hidden = true;
+});
 
 // --- Date/time ticker ---
 function updateClock() {
@@ -428,6 +482,7 @@ readWeightBtn.addEventListener('click', async () => {
 
     if (!result || result.ok === false) {
       logHardware(`Weight read failed: ${(result && result.error) ? result.error : 'Unknown scale error'}`);
+      updateScaleDisplay(null, null);
       return;
     }
 
@@ -435,6 +490,7 @@ readWeightBtn.addEventListener('click', async () => {
       ? result.raw
       : `${result.value}${result.unit ? ` ${result.unit}` : ''}`;
     logHardware(`Weight: ${rendered}`);
+    updateScaleDisplay(result.value ?? result.raw, result.unit || 'kg');
   } catch (error) {
     logHardware(`Weight read failed: ${error.message}`);
   } finally {

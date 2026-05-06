@@ -11,7 +11,11 @@
 <body>
   <header class="topbar">
     <h1>&#128722; Point of Sale <span class="version-badge">v1.0.15</span></h1>
-    <span id="datetime"></span>
+    <div class="topbar-right">
+      <button class="topbar-plugin-btn" id="scaleModalBtn" title="Weight Scale">&#9878; Scale</button>
+      <button class="topbar-plugin-btn topbar-plugin-btn--accent" id="pluginMarketBtn" title="Plugin Marketplace">&#129513; Plugins</button>
+      <span id="datetime"></span>
+    </div>
   </header>
 
   <main class="layout">
@@ -67,22 +71,7 @@
         </div>
       </div>
 
-      <div class="hardware-card">
-        <h3>Weight Scale</h3>
-        <div class="hardware-row">
-          <label for="scaleServerUrl">Scale Server URL</label>
-          <input id="scaleServerUrl" type="text" value="ws://127.0.0.1:8765" style="flex:1;font-family:monospace;" />
-        </div>
-        <div class="hardware-row">
-          <label for="scaleExePath">Scale EXE Path</label>
-          <input id="scaleExePath" type="text" placeholder="C:\...\scale_latest_w_id.exe" style="flex:1;font-family:monospace;font-size:0.82em;" />
-        </div>
-        <div class="hardware-actions">
-          <button id="startScaleBtn" class="btn-clear">Start Scale</button>
-          <button id="checkScaleBtn" class="btn-clear">Check</button>
-          <button id="readWeightBtn" class="btn-checkout">Read Weight</button>
-        </div>
-      </div>
+
       <div class="hardware-card">
         <h3>Barcode Scanner</h3>
         <div class="hardware-row">
@@ -112,6 +101,42 @@
     <div class="plugin-panels-grid" id="plugin-panels"></div>
   </section>
 
+  <!-- Weight Scale Modal -->
+  <div class="modal-overlay" id="scaleModal" hidden>
+    <div class="modal scale-modal">
+      <div class="scale-modal-header">
+        <h2>&#9878; Weight Scale</h2>
+        <button class="scale-modal-close" id="scaleModalClose" title="Close">&times;</button>
+      </div>
+
+      <div class="scale-reading-display" id="scaleReadingDisplay">
+        <span class="scale-value" id="scaleDisplayValue">— —</span>
+        <span class="scale-unit" id="scaleDisplayUnit">kg</span>
+      </div>
+
+      <div class="scale-modal-body">
+        <div class="hardware-row">
+          <label for="scaleServerUrl">Scale Server URL</label>
+          <input id="scaleServerUrl" type="text" value="ws://127.0.0.1:8765" style="flex:1;font-family:monospace;" />
+        </div>
+        <div class="hardware-row">
+          <label for="scaleExePath">Scale EXE Path</label>
+          <input id="scaleExePath" type="text" placeholder="C:\...\scale_latest_w_id.exe" style="flex:1;font-family:monospace;font-size:0.82em;" />
+        </div>
+        <div class="scale-modal-actions">
+          <button id="startScaleBtn" class="btn-clear">&#9654; Start Scale</button>
+          <button id="checkScaleBtn" class="btn-clear">&#10003; Check</button>
+          <button id="readWeightBtn" class="btn-checkout">&#9878; Read Weight</button>
+        </div>
+        <div class="scale-add-to-cart" id="scaleAddToCartRow" style="display:none;">
+          <input id="scaleProductName" type="text" placeholder="Product name (e.g. Apples)" style="flex:1;" />
+          <input id="scaleProductPrice" type="number" placeholder="Price per kg" min="0" step="0.01" style="width:110px;" />
+          <button id="scaleAddCartBtn" class="btn-checkout" style="flex:0 0 auto;">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Receipt Modal -->
   <div class="modal-overlay" id="receiptModal" hidden>
     <div class="modal">
@@ -121,6 +146,40 @@
     </div>
   </div>
 
+  <!-- Plugin Marketplace Modal -->
+  <div class="modal-overlay" id="pluginMarketModal" hidden>
+    <div class="modal mkt-modal">
+      <div class="mkt-header">
+        <h2>&#129513; Plugin Manager</h2>
+        <button class="scale-modal-close" id="pluginMarketClose" title="Close">&times;</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="mkt-tabs">
+        <button class="mkt-tab mkt-tab--active" data-tab="marketplace">&#128店; Marketplace</button>
+        <button class="mkt-tab" data-tab="installed">&#9989; Installed <span class="mkt-badge" id="installedBadge">0</span></button>
+      </div>
+
+      <!-- Marketplace tab -->
+      <div class="mkt-pane" id="mkt-pane-marketplace">
+        <div class="mkt-search-row">
+          <input id="mktSearch" type="text" placeholder="&#128269; Search plugins…" class="mkt-search" />
+        </div>
+        <div class="mkt-grid" id="mktGrid">
+          <p class="mkt-empty">Loading plugins…</p>
+        </div>
+      </div>
+
+      <!-- Installed tab -->
+      <div class="mkt-pane mkt-pane--hidden" id="mkt-pane-installed">
+        <div class="mkt-grid" id="mktInstalledGrid">
+          <p class="mkt-empty">No plugins installed yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="renderer.js"></script>
+  <script src="marketplace.js"></script>
 </body>
 </html>

@@ -26,6 +26,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // ── Plugin / module system ───────────────────────────────────────────────
   plugins: {
     /**
+     * List ALL available plugins (including disabled ones).
+     * Returns [{ id, name, version, description, enabled, active, ... }]
+     */
+    listAll: () => ipcRenderer.invoke('plugin:list-all'),
+
+    /**
+     * Enable or disable a plugin at runtime.
+     * { pluginId: string, enabled: boolean } → { ok: boolean }
+     */
+    setEnabled: (pluginId, enabled) =>
+      ipcRenderer.invoke('plugin:set-enabled', { pluginId, enabled }),
+
+    /**
      * Fetch all registered plugin panels (returns [{ pluginId, htmlContent }]).
      * Called once by the renderer on startup.
      */
