@@ -1,10 +1,10 @@
+/* Design tokens loaded first so Tailwind can reference them */
+@import './variables.css';
+@import './themes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Design tokens must be loaded first so all components can reference them */
-@import './variables.css';
-@import './themes.css';
 
 /* ── Global Reset ──────────────────────────────────────────────────── */
 * {

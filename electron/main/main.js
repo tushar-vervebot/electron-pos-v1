@@ -101,14 +101,26 @@ function createWindow() {
       responseHeaders: {
         ..._details.responseHeaders,
         'Content-Security-Policy': [
-          "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none';"
+          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; connect-src 'self' http://localhost:* ws://localhost:*;"
         ],
       },
     });
   });
 
-  // Updated path: renderer lives in src/renderer/
-  mainWindow.loadFile(path.join(__dirname, '../../src/renderer/index.html'));
+  // ── Renderer: React (Vite build) in production, Vite dev server in development ──
+  const REACT_DIST = path.join(__dirname, '../../src/dist/index.html');
+  const REACT_DEV_URL = 'http://localhost:5173';
+
+  if (!app.isPackaged && process.env.VITE_DEV_SERVER === '1') {
+    // Development: load from Vite dev server (run `npm run renderer:dev` separately)
+    mainWindow.loadURL(REACT_DEV_URL);
+  } else if (require('fs').existsSync(REACT_DIST)) {
+    // Production / built: load the compiled React app
+    mainWindow.loadFile(REACT_DIST);
+  } else {
+    // Fallback: vanilla renderer (pre-React)
+    mainWindow.loadFile(path.join(__dirname, '../../src/renderer/index.html'));
+  }
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow || mainWindow.isDestroyed()) return;

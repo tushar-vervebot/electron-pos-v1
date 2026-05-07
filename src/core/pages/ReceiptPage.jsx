@@ -1,6 +1,5 @@
 import React from 'react'
 import usePOSStore from '../stores/posStore'
-import localDB from '../services/localDB'
 import { Slot } from '../slots/Slot'
 import { SLOT_NAMES } from '../slots/slotNames'
 
@@ -28,7 +27,7 @@ export default function ReceiptScreen() {
   const change  = completedPayment.change ?? 0
   const paidAt  = new Date(payment.created_at ?? Date.now())
 
-  const handlePrint = () => localDB.print()
+  const handlePrint = () => window.electronAPI?.print?.()
 
   return (
     <div className="flex flex-col items-center justify-center h-full overflow-y-auto py-8 px-4 bg-pos-bg">

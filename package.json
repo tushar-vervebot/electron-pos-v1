@@ -4,12 +4,14 @@
     "description": "Point of Sale System for Windows",
     "main": "electron/main/main.js",
     "scripts": {
-        "start": "electron-forge start",
+        "start": "npm run renderer:build && electron-forge start",
         "dev": "node_modules\\electron\\dist\\electron.exe electron\\main\\main.js",
-        "package": "electron-forge package",
-        "make": "electron-forge make",
-        "make:msi": "electron-forge package && node build-msi.js",
-        "dist:win": "electron-builder --win nsis --publish never",
+        "renderer:dev": "vite",
+        "renderer:build": "vite build",
+        "package": "npm run renderer:build && electron-forge package",
+        "make": "npm run renderer:build && electron-forge make",
+        "make:msi": "npm run renderer:build && electron-forge package && node build-msi.js",
+        "dist:win": "npm run renderer:build && electron-builder --win nsis --publish never",
         "serve:updates": "node serve-updates.js"
     },
     "keywords": [],
@@ -26,14 +28,23 @@
         "@electron-forge/plugin-fuses": "^7.11.1",
         "@electron/fuses": "^1.8.0",
         "@yao-pkg/pkg": "^6.14.2",
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.21",
         "electron": "^41.2.0",
-        "electron-builder": "^26.8.1"
+        "electron-builder": "^26.8.1",
+        "postcss": "^8.5.3",
+        "tailwindcss": "^3.4.17",
+        "vite": "^6.3.4"
     },
     "dependencies": {
         "electron-log": "^5.4.3",
         "electron-updater": "^6.8.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-hot-toast": "^2.5.2",
         "serialport": "^12.0.0",
-        "ws": "^8.20.0"
+        "ws": "^8.20.0",
+        "zustand": "^5.0.4"
     },
     "build": {
         "appId": "com.yourcompany.possystem",

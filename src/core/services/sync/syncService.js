@@ -10,9 +10,9 @@
  *    orders and payments are flushed to the server and removed from SQLite.
  */
 
-import { wsService }              from './websocketService'
-import { orderAPI, paymentAPI, healthAPI } from './api'
-import localDB                   from './localDB'
+import { wsService }              from '../websocket/socketService'
+import { orderAPI, paymentAPI, healthAPI } from '../api/apiClient'
+import localDB                   from '../storage/indexedDbService'
 
 const POLL_INTERVAL = 5000  // 5 s polling fallback
 
