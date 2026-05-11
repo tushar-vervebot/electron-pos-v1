@@ -5,8 +5,9 @@ import ProductScreen from '../pages/POSPage'
 import PaymentScreen from '../pages/PaymentPage'
 import ReceiptScreen from '../pages/ReceiptPage'
 import TicketScreen  from '../pages/TicketPage'
+import { getAllScreens } from '../registries/screenRegistry'
 
-const SCREENS = {
+const BASE_SCREENS = {
   products: ProductScreen,
   payment:  PaymentScreen,
   receipt:  ReceiptScreen,
@@ -19,7 +20,12 @@ export default function App() {
   // Boot: connect WS, load products, check health
   useEffect(() => { init() }, [])
 
-  const Screen = SCREENS[currentScreen] ?? ProductScreen
+  // Way 4: screen registry — plugin screens merge with base screens
+  const pluginScreenMap = Object.fromEntries(
+    getAllScreens().map(s => [s.id, s.component])
+  )
+  const allScreens = { ...BASE_SCREENS, ...pluginScreenMap }
+  const Screen = allScreens[currentScreen] ?? ProductScreen
 
   return (
     <div className="flex flex-col h-screen bg-pos-bg overflow-hidden">

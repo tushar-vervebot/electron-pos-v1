@@ -8,3 +8,5 @@ export * from './paymentRegistry';
 export * from './receiptRegistry';
 export * from './themeRegistry';
 export * from './settingsRegistry';
+export * from './componentRegistry';
+export * from './wrapperRegistry';

@@ -2,6 +2,11 @@
 import usePOSStore from '../stores/posStore'
 import ProductCard from '../components/ProductCard'
 import Cart from '../components/Cart'
+import { getWrapped } from '../registries/wrapperRegistry'
+
+// Way 3 (Option B): wrap ProductCard in the parent so ProductCard.jsx stays untouched.
+// If no plugin registered a wrapper, WrappedProductCard === ProductCard.
+const WrappedProductCard = getWrapped('ProductCard', ProductCard)
 
 export default function ProductScreen() {
   const {
@@ -84,7 +89,7 @@ export default function ProductScreen() {
               <p className="text-xs text-pos-muted mb-3">{statusText}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {products.map(product => (
-                  <ProductCard key={product.id} product={product} onAdd={addToCart} />
+                  <WrappedProductCard key={product.id} product={product} onAdd={addToCart} />
                 ))}
               </div>
 

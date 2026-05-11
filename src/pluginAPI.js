@@ -7,6 +7,8 @@ import * as receiptRegistry from './core/registries/receiptRegistry';
 import * as themeRegistry from './core/registries/themeRegistry';
 import * as settingsRegistry from './core/registries/settingsRegistry';
 import * as pluginRegistry from './core/registries/pluginRegistry';
+import * as componentRegistry from './core/registries/componentRegistry';
+import * as wrapperRegistry from './core/registries/wrapperRegistry';
 import { eventBus } from './core/events/eventBus';
 
 /**
@@ -40,6 +42,13 @@ export function createPluginAPI(pluginMeta) {
 
     registerSettingsPanel: (config) =>
       settingsRegistry.registerSettingsPanel({ ...config, pluginId: pluginMeta.id }),
+
+    // ── UI component overrides (Way 1 & Way 3 from POS_MODULARITY_JSX.md) ──
+    registerComponent: (name, component) =>
+      componentRegistry.registerComponent(name, component, pluginMeta.id),
+
+    wrapComponent: (name, WrapperComponent) =>
+      wrapperRegistry.wrapComponent(name, WrapperComponent, pluginMeta.id),
 
     // ── Service access ───────────────────────────────────────────
     getService: (name) =>
@@ -108,6 +117,8 @@ export function unloadPlugin(pluginId) {
   receiptRegistry.removeTemplatesByPluginId(pluginId);
   settingsRegistry.removeSettingsPanelsByPluginId(pluginId);
   serviceRegistry.removeServicesByPluginId(pluginId);
+  componentRegistry.removeComponentsByPluginId(pluginId);
+  wrapperRegistry.removeWrappersByPluginId(pluginId);
   pluginRegistry.unregisterPlugin(pluginId);
 
   console.info(`[PluginLoader] Plugin "${pluginId}" unloaded`);

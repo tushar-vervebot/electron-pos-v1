@@ -6,6 +6,7 @@
     "scripts": {
         "start": "electron-forge start",
         "dev": "node_modules\\electron\\dist\\electron.exe electron\\main\\main.js",
+        "plugin:new": "node scripts/create-plugin.js",
         "package": "electron-forge package",
         "make": "electron-forge make",
         "make:msi": "electron-forge package && node build-msi.js",

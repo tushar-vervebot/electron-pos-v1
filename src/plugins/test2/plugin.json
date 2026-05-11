@@ -1,0 +1,7 @@
+{
+  "id": "test2",
+  "name": "Test2",
+  "version": "1.0.0",
+  "enabled": true,
+  "description": "Test2 plugin"
+}

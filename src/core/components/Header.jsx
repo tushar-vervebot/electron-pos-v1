@@ -1,13 +1,24 @@
 import React from 'react'
 import usePOSStore from '../stores/posStore'
+import { getAllScreens } from '../registries/screenRegistry'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
 
-const NAV_ITEMS = [
+const BASE_NAV_ITEMS = [
   { id: 'products', label: 'Products', icon: '🛒' },
   { id: 'tickets',  label: 'Tickets',  icon: '🎫' }
 ]
 
 export default function Header() {
   const { currentScreen, setScreen, wsConnected, isOnline, openOrders } = usePOSStore()
+
+  // Way 4: screen registry — plugin screens become nav links automatically
+  const pluginNavItems = getAllScreens().map(s => ({
+    id: s.id,
+    label: s.label ?? s.id,
+    icon: s.icon ?? '🔌',
+  }))
+  const navItems = [...BASE_NAV_ITEMS, ...pluginNavItems]
 
   const status = !isOnline
     ? { label: 'Offline', color: 'bg-red-500', dot: '🔴' }
@@ -21,11 +32,13 @@ export default function Header() {
       <div className="flex items-center gap-3">
         <span className="text-xl font-bold text-white tracking-wide">⚡ POS</span>
         <span className="text-pos-muted text-sm hidden sm:block">Point of Sale</span>
+        {/* Way 2: slot — plugins can inject content beside the brand */}
+        <Slot name={SLOT_NAMES.APP_HEADER_LEFT} />
       </div>
 
       {/* Navigation */}
       <nav className="flex items-center gap-1">
-        {NAV_ITEMS.map(item => (
+        {navItems.map(item => (
           <button
             key={item.id}
             onClick={() => setScreen(item.id)}
@@ -47,8 +60,10 @@ export default function Header() {
         ))}
       </nav>
 
-      {/* Status indicator */}
+      {/* Status + right-side slot */}
       <div className="flex items-center gap-2">
+        {/* Way 2: slot — plugins can inject controls into the header right side */}
+        <Slot name={SLOT_NAMES.APP_HEADER_RIGHT} />
         <span className="text-xs text-pos-muted">{status.dot} {status.label}</span>
       </div>
     </header>

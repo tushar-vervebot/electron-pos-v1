@@ -1,0 +1,7 @@
+{
+  "id": "loyalty",
+  "name": "Loyalty Program",
+  "version": "1.0.0",
+  "enabled": true,
+  "description": "Adds per-product loyalty points, a cart footer summary, and a loyalty management screen."
+}

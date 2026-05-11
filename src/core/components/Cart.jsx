@@ -1,5 +1,30 @@
 import React from 'react'
 import usePOSStore from '../stores/posStore'
+import { Slot } from '../slots/Slot'
+import { SLOT_NAMES } from '../slots/slotNames'
+import { getComponent } from '../registries/componentRegistry'
+
+/**
+ * DefaultDiscountRow — base discount row.
+ * A plugin can replace this entirely via componentRegistry ('cart.DiscountRow').
+ */
+function DefaultDiscountRow() {
+  const { subTotal, discount, setDiscount } = usePOSStore()
+  return (
+    <div className="flex items-center justify-between text-xs text-pos-muted">
+      <span>Discount ($)</span>
+      <input
+        type="number"
+        min="0"
+        max={subTotal}
+        value={discount || ''}
+        onChange={e => setDiscount(parseFloat(e.target.value) || 0)}
+        placeholder="0.00"
+        className="w-20 text-right bg-pos-surface border border-pos-border rounded px-2 py-0.5 text-pos-text text-xs focus:outline-none focus:border-pos-blue"
+      />
+    </div>
+  )
+}
 
 export default function Cart({ onCheckout }) {
   const {
@@ -8,6 +33,9 @@ export default function Cart({ onCheckout }) {
     removeFromCart, updateQuantity, clearCart,
     setNotes, setCustomerName, setDiscount
   } = usePOSStore()
+
+  // Way 1: component registry — a plugin can replace the entire discount row
+  const DiscountRow = getComponent('cart.DiscountRow', DefaultDiscountRow)
 
   const isEmpty = cartItems.length === 0
 
@@ -27,6 +55,9 @@ export default function Cart({ onCheckout }) {
           </button>
         )}
       </div>
+
+      {/* Way 2: slot — plugins can inject content into the cart header area */}
+      <Slot name={SLOT_NAMES.POS_CART_HEADER} />
 
       {/* Customer name input */}
       <div className="px-4 pt-3 pb-2 flex-shrink-0">
@@ -62,19 +93,8 @@ export default function Cart({ onCheckout }) {
       {/* Totals & actions */}
       {!isEmpty && (
         <div className="border-t border-pos-border px-4 py-3 flex-shrink-0 space-y-2">
-          {/* Discount row */}
-          <div className="flex items-center justify-between text-xs text-pos-muted">
-            <span>Discount ($)</span>
-            <input
-              type="number"
-              min="0"
-              max={subTotal}
-              value={discount || ''}
-              onChange={e => setDiscount(parseFloat(e.target.value) || 0)}
-              placeholder="0.00"
-              className="w-20 text-right bg-pos-surface border border-pos-border rounded px-2 py-0.5 text-pos-text text-xs focus:outline-none focus:border-pos-blue"
-            />
-          </div>
+          {/* Way 1: component registry — DiscountRow is overridable by plugins */}
+          <DiscountRow />
 
           {/* Summary */}
           <div className="space-y-1 text-sm">
@@ -114,6 +134,9 @@ export default function Cart({ onCheckout }) {
           >
             Proceed to Payment → ${total.toFixed(2)}
           </button>
+
+          {/* Way 2: slot — plugins can inject content below the checkout button */}
+          <Slot name={SLOT_NAMES.POS_CART_FOOTER} />
         </div>
       )}
     </div>
